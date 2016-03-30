@@ -5,7 +5,8 @@ body {
   background: url(../img/page-background.png);
 }
 .section {
-  padding: 30px 0;
+  padding-top: 30px;
+  margin-bottom: -30px;
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
   -o-transform: translateZ(0);
@@ -1353,7 +1354,7 @@ span.color-red {
 --------------------------------------------------------------------------*/
 .in-press a {
   color: #4f8db3;
-  font-size: 24px;;
+  font-size: 30px;;
   font-family: Georgia, serif;
   line-height: 28px;
   position: relative;
