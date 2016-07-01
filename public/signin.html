@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Netsil - Solution pour sourds et mal entendants</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="css/icomoon-social.css">
+        <link rel="stylesheet" href="css/leaflet.css" />
+
+    -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+</head>
+
+<body>
+<div class="mainmenu-wrapper">
+    <div class="container">
+        <nav id="mainmenu" class="mainmenu">
+            <ul>
+                <!--<li class="logo-wrapper"><a href="index.html"><img src="img/mPurpose-logo.png" alt="Multipurpose Twitter Bootstrap Template"></a></li>-->
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li class="active">
+                    <a href="signin.html">Sign in</a>
+                </li>
+                <li>
+                    <a>Sign up</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div>
+    <div class="container basic-login">
+        <form NAME="signinForm">
+            Username:<br>
+            <input type="text" id="signinName" name="user"><br>
+            Password:<br>
+            <input type="password" id="signinPw" name="password"><br><br>
+            <input type="submit" onclick="sendSignIn()">
+        </form>
+    </div>
+    <div class="container spe">
+        Welcome Back
+    </div>
+</div>
+<script>window.jQuery || document.write('<script src="js/jquery-1.9.1.min.js"><\/script>')</script>
+<!--<script src="/socket.io/socket.io.js"></script>-->
+<script>
+    function sendSignIn() {
+        console.log("ON EST LA");
+        let name = $("#signinName").val();
+        console.log("name = " + name);
+        let pw = $("#signinPw").val();
+        $.post("http://192.168.99.100:12345/connect", {user:name, password:pw}, function (data, status) {
+            //console.log(status);
+            if (status == "success"){
+                console.log(data);
+            }
+            else
+                console.log("request failed");
+        });
+
+    }
+
+
+</script>
+</body>
+</html>
