@@ -17,3 +17,5 @@ node_modules/request/
 node_modules/serve-favicon/
 node_modules/socket.io/
 node_modules/.bin/
+node_modules/generator-angular/
+node_modules/generator-karma/

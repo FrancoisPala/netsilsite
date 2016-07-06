@@ -9,26 +9,10 @@
   margin-bottom: 150px;
 }
 
-.mainmain{
-  display: block;
-}
-
-.signin {
-  display: none;
-}
-
 #signin-button {
 }
 
 #myaccount-button {
-}
-
-.signup {
-  display: none;
-}
-
-.my-account {
-  display: none;
 }
 
 body {
