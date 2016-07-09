@@ -2,6 +2,13 @@
 	General Style
 --------------------------------------------------------------------------*/
 
+input.ng-invalid {
+  background-color: pink;
+}
+input.ng-valid {
+  background-color: lightgreen;
+}
+
 .spe {
   text-align: center;
   font-size: 80px;

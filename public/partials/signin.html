@@ -1,11 +1,18 @@
 <div class="signin">
   <div class="container basic-login">
-    <form NAME="signinForm">
-      Username:<br>
-      <input type="text" id="signinName" name="user"><br>
-      Password:<br>
-      <input type="password" id="signinPw" name="password"><br><br>
-      <input type="submit" onclick="sendSignIn()">
+    <form ng-app="myApp" ng-controller="signinCtrl" ng-submit="myVal()" name="signinForm">
+      <p>Username:<br>
+        <input type="text" ng-model="user" name="user" required>
+        <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
+          <span ng-show="myForm.user.$error.required">Username is required.</span>
+        </span>
+      </p>
+      <p>Password:<br>
+        <input type="password" id="signinPw" ng-model="password" name="password" required><br><br>
+      </p>
+      <p>
+        <input type="submit" ng-disabled="myForm.user.$dirty && myForm.user.$invalid">
+      </p>
     </form>
   </div>
   <div class="container spe">

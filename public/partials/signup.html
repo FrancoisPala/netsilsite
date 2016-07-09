@@ -1,13 +1,24 @@
 <div class="signup">
   <div class="container basic-login">
-    <form NAME="signupForm">
-      Username:<br>
-      <input type="text" id="signupName" name="user"><br>
-      Email:<br>
-      <input type="email" id="email" name="email"><br>
-      Password:<br>
-      <input type="password" id="signupPw" name="password"><br><br>
-      <input type="submit" onclick="sendSignUp()">
+    <form ng-app="myApp" ng-controller="signupCtrl" ng-submit="myVal()" name="signupForm">
+      <p>Username:<br>
+        <input type="text" name="user" ng-model="user" required username-directive><br>
+        <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
+        <span ng-show="myForm.user.$error.required">Username is required.</span>
+        </span>
+      </p>
+      <p>Email:<br>
+        <input type="email" name="email" ng-model="email" required>
+        <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+        <span ng-show="myForm.email.$error.required">Email is required.</span>
+        <span ng-show="myForm.email.$error.email">Invalid email address.</span>
+        </span>
+      </p>
+      <p>Password:<br>
+        <input type="password" id="signupPw" name="password" ng-model="password" required password-directive><br>
+      </p>
+      <br>
+      <input type="submit" ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||  myForm.email.$dirty && myForm.email.$invalid"> <!--onclick="sendSignUp()" !-->
     </form>
   </div>
   <div class="container spe">
