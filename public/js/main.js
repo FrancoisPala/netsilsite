@@ -4,20 +4,41 @@ app.controller('HomeController', function($scope) {
   $scope.message = 'Hello from HomeController';
 });
 
+
+
+
+app.factory('userInfo', [function () {
+  return {
+    model: {
+      name: '',
+      id: '',
+      email: ''
+    }
+  };
+}]);
+
+app.controller('accountCtrl', function($scope, userInfo) {
+  //$scope.user = userInfo;
+
+  console.log("bon: " + infos.name + " " + infos.email);
+
+  $scope.name = infos.name;
+  $scope.id = infos.id;
+  $scope.email = infos.email;
+});
+
+
+
+
 /**
  * Configure the Routes
  */
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
-   //Home
   .when("/", {templateUrl: "partials/home.html", controller: "PageCtrl"})
- //Pages
   .when("/signin", {templateUrl: "partials/signin.html", controller: "PageCtrl"})
   .when("/myaccount", {templateUrl: "partials/myaccount.html", controller: "PageCtrl"})
-  /* etc… routes to other pages… */
- //Blog
   .when("/signup", {templateUrl: "partials/signup.html", controller: "PageCtrl"})
- //else 404
   .otherwise("/404", {templateUrl: "partials/404.html", controller: "PageCtrl"});
 }]);
 
@@ -33,21 +54,99 @@ app.controller('PageCtrl', function (/* $scope, $location, $http */) {
 
 let rdy = 0;
 
+
+
+/**
+ * Fcts
+ */
+
+let infos = {};
+
+app.controller('signinCtrl', function($scope, $location, $timeout, userInfo) { //API SEND SUCCESS EVEN THO THE USER DOESNT EXIST? GOT TO TRY AGANI LATER
+  console.log("in the signinCtrl");
+
+  $scope.myVal = function () {
+    console.log("Attempting to connect...");
+    let name = $scope.user;
+    let pw = $scope.password;
+
+    console.log(name + " " + pw);
+
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {username:name, password:pw}, function (data, status) {
+      console.log("Request status: " + status);
+      if (status == "success"){
+        let obj = JSON.parse(JSON.stringify(data));
+        console.log(obj);
+
+        let id = obj['id'];
+        let username = obj['login'];
+
+        //let ai = $("#account-info");
+
+        infos.name = username;
+        infos.id=id;
+        infos.email = "netsil@netsil.com";
+
+        console.log("still and: " + infos.email + " " + infos.name);
+        userInfo.name = username;
+        userInfo.id = id;
+        userInfo.email = "netsil@netsil.com";
+
+
+        //ai.append("<p>My account<br><br>Name: " + username + "<br>id: " + id + "<br>email: netsil@netsil.com</p>");
+        //$location.path('/myaccount');
+        $timeout(function () {
+          $scope.currentPath = $location.path('/myaccount');
+        }, 0);
+      }
+      else
+        console.log("request failed");
+    });
+  }
+});
+
+app.controller('signupCtrl', function($scope) {
+  $scope.user = 'John Doe';
+  $scope.email = 'john.doe@gmail.com';
+  $scope.password = '******';
+
+  $scope.myVal = function() {
+    console.log("sending info...");
+    let name = $scope.user;
+    let email = $scope.email;
+    let pw = $scope.password;
+    //console.log("info is: " + name + " " + email + " " + pw);
+
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {username:name, password:pw}, function (data, status) {
+      if (status == "success"){
+        console.log("success, data is: " + data);
+      }
+      else
+        console.log("request failed");
+    });
+  }
+});
+
+
+/**
+ * DIRECTIVES
+ */
+
 app.directive('usernameDirective', function() {
   return {
     require: 'ngModel',
     link: function(scope, element, attr, mCtrl) {
       function myValidation(value) {
-          if (value){
-            if (value.length < 4 || value.length > 20) {
-              mCtrl.$setValidity('charE', false);
-              rdy += 1;
-            } else {
-              rdy -= 1;
-              mCtrl.$setValidity('charE', true);
-            }
-            return value;
+        if (value){
+          if (value.length < 4 || value.length > 20) {
+            mCtrl.$setValidity('charE', false);
+            rdy += 1;
+          } else {
+            rdy -= 1;
+            mCtrl.$setValidity('charE', true);
           }
+          return value;
+        }
       }
 
       mCtrl.$parsers.push(myValidation);
@@ -92,95 +191,3 @@ app.directive('passwordDirective', function() {
     }
   };
 });
-
-
-/**
- * Fcts
- */
-
-function sendSignIn() {
-  let name = $("#signinName").val();
-  console.log("name = " + name);
-  let pw = $("#signinPw").val();
-  $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {username:name, password:pw}, function (data, status) {
-    //console.log(status);
-    if (status == "success"){
-      let obj = JSON.parse(JSON.stringify(data));
-      console.log(obj);
-
-      let id = obj['id'];
-      let username = obj['login'];
-
-      let ai = $("#account-info");
-      ai.append("<p>My account<br><br>Name: " + username + "<br>id: " + id + "<br>email: netsil@netsil.com</p>");
-
-    }
-    else
-      console.log("request failed");
-  });
-}
-
-app.controller('signinCtrl', function($scope) {
-  console.log("in the signinCtrl");
-
-  $scope.myVal = function () {
-    console.log("Attempting to connect...");
-    let name = $scope.user;
-    let pw = $scope.password;
-
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {username:name, password:pw}, function (data, status) {
-      console.log("Request status: " + status);
-      if (status == "success"){
-        let obj = JSON.parse(JSON.stringify(data));
-        console.log(obj);
-
-        let id = obj['id'];
-        let username = obj['login'];
-
-        let ai = $("#account-info");
-        ai.append("<p>My account<br><br>Name: " + username + "<br>id: " + id + "<br>email: netsil@netsil.com</p>");
-
-      }
-      else
-        console.log("request failed");
-    });
-  }
-});
-
-app.controller('signupCtrl', function($scope) {
-  $scope.user = 'John Doe';
-  $scope.email = 'john.doe@gmail.com';
-  $scope.password = '******'
-
-  $scope.myVal = function() {
-    console.log("sending info...");
-    let name = $scope.user;
-    let email = $scope.email;
-    let pw = $scope.password;
-    //console.log("info is: " + name + " " + email + " " + pw);
-
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {username:name, password:pw}, function (data, status) {
-      if (status == "success"){
-        console.log("success, data is: " + data);
-      }
-      else
-        console.log("request failed");
-    });
-  }
-});
-
-
-//function sendSignUp() {
-//  console.log("in the send sign up");
-//  let name = $("#signupName").val();
-//  let email = $("#email").val();
-//  let pw = $("#signupPw").val();
-//
-//  $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {username:name, password:pw}, function (data, status) {
-//    if (status == "success"){
-//      console.log("success, data is: " + data);
-//    }
-//    else
-//      console.log("request failed");
-//  });
-//}
