@@ -72,7 +72,7 @@ app.controller('signinCtrl', function($scope, $location, $timeout, userInfo) { /
 
     console.log(name + " " + pw);
 
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {username:name, password:pw}, function (data, status) {
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {user:name, password:pw}, function (data, status) {
       console.log("Request status: " + status);
       if (status == "success"){
         let obj = JSON.parse(JSON.stringify(data));
@@ -81,10 +81,11 @@ app.controller('signinCtrl', function($scope, $location, $timeout, userInfo) { /
         let id = obj['id'];
         let username = obj['login'];
 
+        console.log("fuck " + id + " " + username);
         //let ai = $("#account-info");
 
         infos.name = username;
-        infos.id=id;
+        infos.id = id;
         infos.email = "netsil@netsil.com";
 
         console.log("still and: " + infos.email + " " + infos.name);
@@ -115,11 +116,12 @@ app.controller('signupCtrl', function($scope) {
     let name = $scope.user;
     let email = $scope.email;
     let pw = $scope.password;
-    //console.log("info is: " + name + " " + email + " " + pw);
+    console.log("info is: " + name + " " + email + " " + pw);
 
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {username:name, password:pw}, function (data, status) {
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {user:name, password:pw, email:email}, function (data, status) {
       if (status == "success"){
-        console.log("success, data is: " + data);
+        let obj = JSON.parse(JSON.stringify(data));
+        console.log("success, data is: " + obj);
       }
       else
         console.log("request failed");
