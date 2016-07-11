@@ -17,14 +17,17 @@ app.factory('userInfo', [function () {
   };
 }]);
 
-app.controller('accountCtrl', function($scope, userInfo) {
+app.controller('accountCtrl', function($scope, $rootScope, userInfo) {
   //$scope.user = userInfo;
 
-  console.log("bon: " + infos.name + " " + infos.email);
+  //console.log("bon: " + infos.name + " " + infos.email);
 
-  $scope.name = infos.name;
-  $scope.id = infos.id;
-  $scope.email = infos.email;
+  $scope.user = {};
+  $scope.user.id = $rootScope.id;
+  $scope.user.email = $rootScope.email;
+
+  console.log("accountCtrl: " + $scope.user.id + " " + $scope.email)
+
 });
 
 
@@ -62,15 +65,14 @@ let rdy = 0;
 
 let infos = {};
 
-app.controller('signinCtrl', function($scope, $location, $timeout, userInfo) { //API SEND SUCCESS EVEN THO THE USER DOESNT EXIST? GOT TO TRY AGANI LATER
-  console.log("in the signinCtrl");
+app.controller('signinCtrl', function($scope, $location, $timeout, $rootScope, userInfo) { //API SEND SUCCESS EVEN THO THE USER DOESNT EXIST? GOT TO TRY AGANI LATER
 
   $scope.myVal = function () {
     console.log("Attempting to connect...");
     let name = $scope.user;
     let pw = $scope.password;
 
-    console.log(name + " " + pw);
+    //console.log(name + " " + pw);
 
     $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {user:name, password:pw}, function (data, status) {
       console.log("Request status: " + status);
@@ -78,27 +80,30 @@ app.controller('signinCtrl', function($scope, $location, $timeout, userInfo) { /
         let obj = JSON.parse(JSON.stringify(data));
         console.log(obj);
 
-        let id = obj['id'];
-        let username = obj['login'];
+        if (obj['token']) {
+          console.log("REQ SUCCESS");
+          let id = obj['user'];
 
-        console.log("fuck " + id + " " + username);
-        //let ai = $("#account-info");
+          console.log("filling the rootscope: " + " " + id);
 
-        infos.name = username;
-        infos.id = id;
-        infos.email = "netsil@netsil.com";
+          $rootScope.user = {};
+          $rootScope.connected = 1;
+          $rootScope.id = id;
+          $rootScope.email = "email";
 
-        console.log("still and: " + infos.email + " " + infos.name);
-        userInfo.name = username;
-        userInfo.id = id;
-        userInfo.email = "netsil@netsil.com";
+          $("#signin").toggle();
+          $("#signout").toggle();
+          $("#signup").toggle();
 
-
-        //ai.append("<p>My account<br><br>Name: " + username + "<br>id: " + id + "<br>email: netsil@netsil.com</p>");
-        //$location.path('/myaccount');
-        $timeout(function () {
-          $scope.currentPath = $location.path('/myaccount');
-        }, 0);
+          $timeout(function () {
+            $scope.currentPath = $location.path('/myaccount');
+          }, 0);
+        }
+        else {
+          //message d'erreur
+          console.log("ERREUR DE REQ");
+          $("#myerror").css("display", "block");
+        }
       }
       else
         console.log("request failed");
@@ -118,7 +123,7 @@ app.controller('signupCtrl', function($scope) {
     let pw = $scope.password;
     console.log("info is: " + name + " " + email + " " + pw);
 
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {user:name, password:pw, email:email}, function (data, status) {
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {username:name, password:pw}, function (data, status) {
       if (status == "success"){
         let obj = JSON.parse(JSON.stringify(data));
         console.log("success, data is: " + obj);
@@ -129,6 +134,18 @@ app.controller('signupCtrl', function($scope) {
   }
 });
 
+app.controller('headerCtrl', function($scope, $rootScope) {
+  $scope.signOut = function () {
+    $("#signin").toggle();
+    $("#signout").toggle();
+    $("#signup").toggle();
+
+
+    $rootScope.user = {};
+    $rootScope.user.connected = 0;
+    $rootScope.user.id = "";
+  }
+});
 
 /**
  * DIRECTIVES
@@ -193,3 +210,7 @@ app.directive('passwordDirective', function() {
     }
   };
 });
+
+function signOut($rootScope){
+
+}

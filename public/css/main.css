@@ -2,6 +2,19 @@
 	General Style
 --------------------------------------------------------------------------*/
 
+li {
+  display: inline-block;
+}
+
+#signout {
+  display: none;
+}
+
+#myerror {
+  color: red;
+  display: none;
+}
+
 input.ng-invalid {
   background-color: pink;
 }
@@ -14,9 +27,6 @@ input.ng-valid {
   font-size: 80px;
   padding-top: 150px;
   margin-bottom: 150px;
-}
-
-#signin-button {
 }
 
 #myaccount-button {

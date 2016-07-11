@@ -1,10 +1,9 @@
 <div class="my-account" ng-controller="accountCtrl">
   <div class="container basic-login">
     <div id="account-info">
-      <div>Name</div>
-      <h3>{{name}}</h3>
-      <div>ID</div>
-      <div>Email</div>
+      <div>Your ID: <span ng-bind="user.id"></span></div>
+      <div></div>
+      <h3>{{$scope.email}}</h3>
     </div>
   </div>
   <div class="container spe">

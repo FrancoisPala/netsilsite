@@ -1,19 +1,21 @@
 <div class="mainmenu-wrapper">
-  <div class="container">
+  <div class="container" ng-controller="headerCtrl">
     <nav id="mainmenu" class="mainmenu">
       <ul>
-        <!--<li class="logo-wrapper"><a href="index.html"><img src="img/mPurpose-logo.png" alt="Multipurpose Twitter Bootstrap Template"></a></li>-->
         <li class="active">
-          <a href="#/" >Home</a>
+          <a href="#/">Home</a>
         </li>
-        <li id="signin-button">
+        <li id="signin">
           <a href="#/signin">Sign in</a>
         </li>
         <li id="myaccount-button">
           <a href="#/myaccount">My Account</a>
         </li>
-        <li>
+        <li id="signup">
           <a href="#/signup">Sign up</a>
+        </li>
+        <li id="signout" ng-click="signOut()">
+          <a href="#/" onclick="signOut()">Sign out</a>
         </li>
       </ul>
     </nav>
