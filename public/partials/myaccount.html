@@ -1,9 +1,60 @@
 <div class="my-account" ng-controller="accountCtrl">
   <div class="container basic-login">
     <div id="account-info">
-      <div>Your ID: <span ng-bind="user.id"></span></div>
-      <div></div>
-      <h3>{{$scope.email}}</h3>
+      <h3>Your ID: <span ng-bind="user.id"></span></h3>
+      <h3>Your Postal Code: <span ng-bind="postal"></span></h3>
+
+      <br><br>
+    </div>
+    <div id="changeform" ng-controller="changeInfoCtrl">
+      <h5>Want to change your credentials? Fill any of these forms:</h5>
+
+      <form ng-app="myApp"  ng-submit="changeValUsername()" name="changeUsernameForm">
+        <p>New Username:<br>
+          <input type="text" name="user" ng-model="user" required username-directive><br>
+          <span style="color:red" ng-show="changeUsernameForm.user.$dirty && changeUsernameForm.user.$invalid">
+            <span ng-show="changeUsernameForm.user.$error.required">Username is required.</span>
+          </span>
+        </p>
+        <input type="submit" ng-disabled="changeUsernameForm.user.$dirty && changeUsernameForm.user.$invalid"> <!--onclick="sendSignUp()" !-->
+        <p id="userUp">Username updated!</p>
+      </form>
+
+      <form ng-app="myApp"  ng-submit="changeValEmail()" name="changeEmailForm">
+        <p>New Email:<br>
+          <input type="email" name="email" ng-model="email" required>
+          <span style="color:red" ng-show="changeEmailForm.email.$dirty && changeEmailForm.email.$invalid">
+            <span ng-show="changeEmailForm.email.$error.required">Email is required.</span>
+            <span ng-show="changeEmailForm.email.$error.email">Invalid email address.</span>
+          </span>
+        </p>
+        <input type="submit" ng-disabled="changeEmailForm.email.$dirty && changeEmailForm.email.$invalid"> <!--onclick="sendSignUp()" !-->
+        <p id="emailUp">Email updated!</p>
+      </form>
+
+      <form ng-app="myApp"  ng-submit="changeValPassword()" name="changePasswordForm">
+        <p>New Password:<br>
+          <input type="password" id="signupPw" name="password" ng-model="password" required password-directive><br>
+          <span style="color:red" ng-show="changePasswordForm.password.$dirty && changePasswordForm.password.$invalid">
+              <span ng-show="changePasswordForm.password.$error.password">Password must be equal or longer than 6 characters.</span>
+          </span>
+        </p>
+        <input type="submit" ng-disabled="changePasswordForm.password.$dirty && changePasswordForm.password.$invalid"> <!--onclick="sendSignUp()" !-->
+        <p id="passwordUp">Password updated!</p>
+      </form>
+
+      <form ng-app="myApp"  ng-submit="changeValPostal()" name="changePostalForm">
+        <p>Update Postal Code:<br>
+          <input type="text"  name="postal" ng-model="postal" pattern="[0-9]{5}" required postal-directive><br>
+          <span style="color:red" ng-show="changePostalForm.postal.$dirty && changePostalForm.postal.$invalid">
+            <span ng-show="changePostalForm.postal.$error.required">Postal code must be 5 numbers.</span>
+            <span ng-show="changePostalForm.postal.$error.postal">Postal code must be 5 numbers.</span>
+          </span>
+        </p>
+        <input type="submit" ng-disabled="changePostalForm.postal.$dirty && changePostalForm.postal.$invalid"> <!--onclick="sendSignUp()" !-->
+        <p id="postalUp">Postal Code updated!</p>
+      </form>
+
     </div>
   </div>
   <div class="container spe">

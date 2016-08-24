@@ -20,6 +20,8 @@
       <br>
       <input type="submit" ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||  myForm.email.$dirty && myForm.email.$invalid"> <!--onclick="sendSignUp()" !-->
     </form>
+    <p id="mysuccess">Account created! You can now log in with your credentials.</p>
+    <p id="myerror">Couldn't create the account. Try with a different username / address, because the current ones might already be used.</p>
   </div>
   <div class="container spe">
     Welcome

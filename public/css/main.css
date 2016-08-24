@@ -6,7 +6,27 @@ li {
   display: inline-block;
 }
 
+#userUp, #emailUp, #passwordUp, #postalUp {
+  display: none;
+  color: green;
+}
+
+#changeform {
+  padding-left: 5px;
+  padding-bottom: 5px;
+  border:1px solid black;
+}
+
 #signout {
+  display: none;
+}
+
+#myaccount-button {
+  display: none;
+}
+
+#mysuccess {
+  color: green;
   display: none;
 }
 
@@ -29,8 +49,7 @@ input.ng-valid {
   margin-bottom: 150px;
 }
 
-#myaccount-button {
-}
+
 
 body {
   background: url(../img/page-background.png);

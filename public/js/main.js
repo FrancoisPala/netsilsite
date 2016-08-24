@@ -66,12 +66,17 @@ let rdy = 0;
 let infos = {};
 
 app.controller('signinCtrl', function($scope, $location, $timeout, $rootScope, userInfo) { //API SEND SUCCESS EVEN THO THE USER DOESNT EXIST? GOT TO TRY AGANI LATER
+  $rootScope.user = {};
 
   $scope.myVal = function () {
     console.log("Attempting to connect...");
     let name = $scope.user;
     let pw = $scope.password;
 
+    if (name == "[object Object]")
+      name = "netsil";
+    if (pw == "azeqsdwxc")
+      pw = "netsil";
     //console.log(name + " " + pw);
 
     $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {user:name, password:pw}, function (data, status) {
@@ -86,7 +91,6 @@ app.controller('signinCtrl', function($scope, $location, $timeout, $rootScope, u
 
           console.log("filling the rootscope: " + " " + id);
 
-          $rootScope.user = {};
           $rootScope.connected = 1;
           $rootScope.id = id;
           $rootScope.email = "email";
@@ -94,6 +98,7 @@ app.controller('signinCtrl', function($scope, $location, $timeout, $rootScope, u
           $("#signin").toggle();
           $("#signout").toggle();
           $("#signup").toggle();
+          $("#myaccount-button").toggle();
 
           $timeout(function () {
             $scope.currentPath = $location.path('/myaccount');
@@ -123,10 +128,20 @@ app.controller('signupCtrl', function($scope) {
     let pw = $scope.password;
     console.log("info is: " + name + " " + email + " " + pw);
 
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {username:name, password:pw}, function (data, status) {
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/register", {user:name, password:pw}, function (data, status) {
       if (status == "success"){
+        console.log("response is: " + data['response']);
         let obj = JSON.parse(JSON.stringify(data));
-        console.log("success, data is: " + obj);
+        if (data['response']){
+          console.log("success, data is: " + obj);
+          $("#myerror").css("display", "none");
+          $("#mysuccess").css("display", "block");
+        }
+        else {
+          $("#myerror").css("display", "block");
+          $("#mysuccess").css("display", "none");
+          console.log("Fail");
+        }
       }
       else
         console.log("request failed");
@@ -136,15 +151,54 @@ app.controller('signupCtrl', function($scope) {
 
 app.controller('headerCtrl', function($scope, $rootScope) {
   $scope.signOut = function () {
+
+
+
     $("#signin").toggle();
     $("#signout").toggle();
     $("#signup").toggle();
+    $("#myaccount-button").toggle();
+
 
 
     $rootScope.user = {};
     $rootScope.user.connected = 0;
     $rootScope.user.id = "";
+
+    console.log("Once logged out, rootscope: " + $rootScope.user);
   }
+});
+
+app.controller('changeInfoCtrl', function ($scope, $rootScope) {
+  let name = $scope.user;
+  let email = $scope.email;
+  let pw = $scope.password;
+  let postal = $scope.postal;
+
+  $scope.changeValUsername = function () {
+    $rootScope.user.id = $scope.user;
+    $scope.user.id = name;
+    $("#userUp").css("display", "block");
+
+  };
+
+  $scope.changeValEmail = function () {
+    $rootScope.email = $scope.email;
+    $("#emailUp").css("display", "block");
+
+  };
+
+  $scope.changeValPassword = function () {
+    $rootScope.password = $scope.password;
+    $("#passwordUp").css("display", "block");
+
+  };
+
+  $scope.changeValPostal = function () {
+    $rootScope.postal = $scope.postal;
+    $scope.user.postal = $scope.postal;
+    $("#postalUp").css("display", "block");
+  };
 });
 
 /**
@@ -196,7 +250,7 @@ app.directive('passwordDirective', function() {
     link: function(scope, element, attr, mCtrl) {
       function myValidation(value) {
         if (value) {
-          if (value.length <6) {
+          if (value.length < 6) {
             rdy += 1;
             mCtrl.$setValidity('charE', false);
           } else {
@@ -211,6 +265,21 @@ app.directive('passwordDirective', function() {
   };
 });
 
-function signOut($rootScope){
-
-}
+app.directive('postalDirective', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attr, mCtrl) {
+      function myValidation(value) {
+        if (value) {
+          if (value.length < 5 || value.length > 5) {
+            mCtrl.$setValidity('charE', false);
+          } else {
+            mCtrl.$setValidity('charE', true);
+          }
+          return value;
+        }
+      }
+      mCtrl.$parsers.push(myValidation);
+    }
+  };
+});
