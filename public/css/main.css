@@ -412,3 +412,34 @@ a:hover {
   color: #4f8db3;
   font-weight: 600 !important;
 }
+
+.btn {
+  border: 1px solid #4f8db3;
+  -webkit-border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 2px;
+  -moz-background-clip: padding;
+  border-radius: 2px;
+  background-clip: padding-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  text-transform: none;
+  -webkit-transition: all .25s ease;
+  -moz-transition: all .25s ease;
+  -o-transition: all .25s ease;
+  -ms-transition: all .25s ease;
+  transition: all .25s ease;
+  text-align: center;
+  background: none repeat scroll 0 0 #4f8db3;
+  text-shadow: none;
+  box-shadow: none;
+  color: #FFF;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: none repeat scroll 0 0 #3b3c41;
+  color: #FFF;
+  text-decoration: none;
+  border: 1px solid #3b3c41;
+}

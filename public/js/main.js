@@ -77,20 +77,19 @@ app.controller('signinCtrl', function($scope, $location, $timeout, $rootScope, u
       name = "netsil";
     if (pw == "azeqsdwxc")
       pw = "netsil";
+    let tk = "";
     //console.log(name + " " + pw);
 
-    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {user:name, password:pw}, function (data, status) {
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/connect", {user:name, password:pw, token:tk}, function (data, status) {
       console.log("Request status: " + status);
       if (status == "success"){
         let obj = JSON.parse(JSON.stringify(data));
         console.log(obj);
 
         if (obj['token']) {
-          console.log("REQ SUCCESS");
           let id = obj['user'];
 
-          console.log("filling the rootscope: " + " " + id);
-
+          $rootScope.token = obj['token'];
           $rootScope.connected = 1;
           $rootScope.id = id;
           $rootScope.email = "email";
@@ -175,9 +174,25 @@ app.controller('changeInfoCtrl', function ($scope, $rootScope) {
   let pw = $scope.password;
   let postal = $scope.postal;
 
+  console.log("upinhere");
+
+
   $scope.changeValUsername = function () {
     $rootScope.user.id = $scope.user;
     $scope.user.id = name;
+    console.log("new name is", $scope.user, $rootScope.token);
+
+    $.post("http://ec2-50-112-40-35.us-west-2.compute.amazonaws.com:12345/update", {user:name, password:pw, token:$rootScope.token}, function (data, status) {
+      if (status == "success"){
+        console.log("response is: " + data['response']);
+
+
+      }
+      else
+        console.log("request failed");
+    });
+
+
     $("#userUp").css("display", "block");
 
   };
