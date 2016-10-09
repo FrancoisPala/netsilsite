@@ -39,6 +39,9 @@ app.controller('accountCtrl', function($scope, $rootScope, userInfo) {
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
   .when("/", {templateUrl: "partials/home.html", controller: "PageCtrl"})
+  .when("/project", {templateUrl: "partials/project.html", controller: "PageCtrl"})
+  .when("/api", {templateUrl: "partials/api.html", controller: "PageCtrl"})
+  .when("/whatsnext", {templateUrl: "partials/whatsnext.html", controller: "PageCtrl"})
   .when("/signin", {templateUrl: "partials/signin.html", controller: "PageCtrl"})
   .when("/myaccount", {templateUrl: "partials/myaccount.html", controller: "PageCtrl"})
   .when("/signup", {templateUrl: "partials/signup.html", controller: "PageCtrl"})
